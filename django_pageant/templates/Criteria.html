@@ -1,0 +1,95 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Score Criteria</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <style>
+    .card {
+      background: linear-gradient(to right, #2c003e, #4b0082);
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      color: white;
+    }
+    input { width: 100%; padding: 8px; margin-top: 6px; }
+    .container { padding: 2rem; }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <h1>👑 Scoring Criteria 👑</h1>
+  </header>
+  <div class="container">
+    <main class="content">
+      <form id="criteriaForm"></form>
+      <button type="submit" form="criteriaForm" class="manage-btn">Save Scores</button>
+    </main>
+    <div class="back-link">
+      <a id="backLink" href="{% url 'organizer-segments' %}">← Back to Segments</a>
+    </div>
+  </div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const eventIndex = params.get('event');
+const participant = params.get('participant');
+const segment = params.get('segment');
+
+const events = JSON.parse(sessionStorage.getItem('pageantEvents')) || [];
+const form = document.getElementById('criteriaForm');
+
+document.getElementById('backLink').href = `Segments.html?event=${eventIndex}&participant=${encodeURIComponent(participant)}`;
+
+const data = events[eventIndex];
+const selectedSegment = data?.segments?.find(s => s.name === segment);
+
+// Load previous scores if available
+const allScores = JSON.parse(sessionStorage.getItem('pageantScores')) || {};
+const saved = allScores?.[eventIndex]?.[participant]?.[segment] || {};
+
+if (selectedSegment && selectedSegment.criteria && selectedSegment.criteria.length > 0) {
+  selectedSegment.criteria.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    const savedValue = saved.criteria?.[c.name] ?? '';
+    div.innerHTML = `
+      <h3>${c.name} (${c.weight}%)</h3>
+      <input type="number" data-criterion="${c.name}" data-weight="${c.weight}" placeholder="Score out of 10" min="0" max="10" required value="${savedValue}">
+    `;
+    form.appendChild(div);
+  });
+} else {
+  form.innerHTML = '<p>No criteria found for this segment. Please add them in Manage Event.</p>';
+}
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  const inputs = form.querySelectorAll('input');
+  const scores = {};
+  let totalWeighted = 0;
+
+  inputs.forEach(input => {
+    const name = input.dataset.criterion;
+    const weight = parseFloat(input.dataset.weight) / 100;
+    const score = parseFloat(input.value);
+    scores[name] = score;
+    totalWeighted += score * weight;
+  });
+
+  if (!allScores[eventIndex]) allScores[eventIndex] = {};
+  if (!allScores[eventIndex][participant]) allScores[eventIndex][participant] = {};
+  allScores[eventIndex][participant][segment] = {
+    criteria: scores,
+    weightedScore: totalWeighted
+  };
+
+  sessionStorage.setItem('pageantScores', JSON.stringify(allScores));
+  alert(`Segment Score: ${totalWeighted.toFixed(2)} saved successfully!`);
+});
+</script>
+</body>
+</html>

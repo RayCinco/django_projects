@@ -1,0 +1,166 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Judge Profile - Pageant Scoring System</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+  <style>
+    .profile-pic-preview {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1em;
+      border: 2px solid #ccc;
+    }
+
+    .upload-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+ <h1>👑 SagiSaya 👑</h1>
+    <p class="shimmer">To crown with joy</p>>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar">
+      <div class="organizer-panel">
+        <h2>Judge Panel</h2>
+        
+        <div id="sidebarPicWrapper">
+          <img id="sidebarProfilePic" class="profile-pic-preview" src="" alt="Profile Picture" />
+        </div>
+
+        <p>Logged in as: <strong id="judgeName">Judge Doe</strong></p>
+        &nbsp;
+        <nav class="nav-links">
+          <a href="{% url 'judge-dashboard' %}">My Events</a>
+          <a href="{% url 'judge-profile' %}" class="active">Profile</a>
+          <a href="{% url 'login' %}">Logout</a>
+        </nav>
+      </div>
+    </aside>
+
+    &nbsp;&nbsp;
+    <main class="content">
+      &nbsp;
+      <h2>Edit Judge Profile</h2>
+      &nbsp;
+
+      <div class="card">
+        <form id="judgeProfileForm">
+          <div class="upload-section">
+            <label>Profile Picture:</label>
+            <img id="profilePreview" class="profile-pic-preview" src="" alt="Preview" />
+            <input type="file" id="profilePic" accept="image/*" />
+          </div>
+
+          <label>Full Name:
+            <input type="text" id="fullName" required />
+          </label>
+
+          <label>Email:
+            <input type="email" id="email" required />
+          </label>
+
+          <label>Username:
+            <input type="text" id="username" required />
+          </label>
+
+          <label>Password:
+            <input type="password" id="password" required />
+          </label>
+
+          <button type="submit" class="manage-btn">Save Changes</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const profileKey = 'judgeProfile';
+
+    function loadProfile() {
+      const defaultProfile = {
+        fullName: "Judge Doe",
+        email: "judge@example.com",
+        username: "judgedoe",
+        password: "password123",
+        photo: ""
+      };
+
+      const storedProfile = JSON.parse(sessionStorage.getItem(profileKey)) || defaultProfile;
+
+      document.getElementById('fullName').value = storedProfile.fullName;
+      document.getElementById('email').value = storedProfile.email;
+      document.getElementById('username').value = storedProfile.username;
+      document.getElementById('password').value = storedProfile.password;
+      document.getElementById('judgeName').innerText = storedProfile.fullName;
+
+      if (storedProfile.photo) {
+        document.getElementById('profilePreview').src = storedProfile.photo;
+        document.getElementById('sidebarProfilePic').src = storedProfile.photo;
+      } else {
+        const placeholder = 'https://via.placeholder.com/100';
+        document.getElementById('profilePreview').src = placeholder;
+        document.getElementById('sidebarProfilePic').src = placeholder;
+      }
+    }
+
+    function saveProfile(e) {
+      e.preventDefault();
+
+      const reader = new FileReader();
+      const fileInput = document.getElementById('profilePic');
+      const file = fileInput.files[0];
+
+      const profileData = {
+        fullName: document.getElementById('fullName').value,
+        email: document.getElementById('email').value,
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value,
+        photo: document.getElementById('profilePreview').src // current preview
+      };
+
+      if (file) {
+        reader.onload = function(event) {
+          profileData.photo = event.target.result;
+          sessionStorage.setItem(profileKey, JSON.stringify(profileData));
+          alert('Profile updated with new picture!');
+          document.getElementById('sidebarProfilePic').src = profileData.photo;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        sessionStorage.setItem(profileKey, JSON.stringify(profileData));
+        alert('Profile updated!');
+        document.getElementById('sidebarProfilePic').src = profileData.photo;
+      }
+
+      document.getElementById('judgeName').innerText = profileData.fullName;
+    }
+
+    document.getElementById('judgeProfileForm').addEventListener('submit', saveProfile);
+
+    document.getElementById('profilePic').addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById('profilePreview').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    window.onload = loadProfile;
+  </script>
+</body>
+</html>

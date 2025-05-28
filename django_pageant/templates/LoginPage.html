@@ -1,0 +1,261 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Pageant Scoring System</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+   body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('purp.png');
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  position: relative;
+}
+
+    body.organizer {
+      background-image: url('purp.png');
+    }
+
+    body.judge {
+      background-image: url('gold.png');
+    }
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 0;
+}
+
+body::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+    .login-container {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #dda0dd;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+      text-align: center;
+      backdrop-filter: blur(12px);
+      width: 320px;
+    }
+
+    .login-container h1 {
+      color: #ffd700;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 2px black;
+    }
+
+    .toggle-switch {
+      margin: 1rem auto;
+      display: flex;
+      background: #a855f7;
+      border-radius: 9999px;
+      padding: 5px;
+      width: 100%;
+      max-width: 260px;
+      position: relative;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .toggle-option {
+      flex: 1;
+      text-align: center;
+      line-height: 40px;
+      color: white;
+      font-weight: bold;
+      transition: color 0.3s;
+      z-index: 2;
+    }
+
+    .toggle-option.active {
+      color: #6b21a8;
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 5px;
+      bottom: 5px;
+      width: 50%;
+      background: white;
+      border-radius: 9999px;
+      transition: left 0.3s ease;
+      z-index: 1;
+    }
+
+    .toggle-thumb.organizer {
+      left: 5px;
+    }
+
+    .toggle-thumb.judge {
+      left: calc(50% + -5px);
+    }
+
+    .login-container label {
+      display: block;
+      margin-top: 1.2rem;
+      font-weight: bold;
+      color: white;
+      text-align: left;
+    }
+
+    .login-container input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1em;
+    }
+
+    .login-container button {
+      background: #ffd700;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      margin-top: 1.5rem;
+      border-radius: 10px;
+      color: #4b0082;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      width: 100%;
+    }
+
+    .login-container button:hover {
+      background: #fffacd;
+    }
+  </style>
+</head>
+<body class="organizer" id="body">
+
+  <div class="login-container">
+    <h1>👑 Login 👑</h1>
+
+    <!-- Role Toggle -->
+    <div class="toggle-switch" id="roleSwitch">
+      <div class="toggle-thumb organizer" id="toggleThumb"></div>
+      <div class="toggle-option active" id="organizerOption">Organizer</div>
+      <div class="toggle-option" id="judgeOption">Judge</div>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm">
+      <input type="hidden" id="role" value="organizer">
+
+      <label for="username">Username</label>
+      <input type="text" id="username" required>
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <script>
+    const body = document.body;
+    const toggleThumb = document.getElementById('toggleThumb');
+    const organizerOption = document.getElementById('organizerOption');
+    const judgeOption = document.getElementById('judgeOption');
+    const roleInput = document.getElementById('role');
+function switchRole(role) {
+  toggleThumb.classList.remove('organizer', 'judge');
+  toggleThumb.classList.add(role);
+
+  organizerOption.classList.toggle('active', role === 'organizer');
+  judgeOption.classList.toggle('active', role === 'judge');
+
+  roleInput.value = role;
+
+  const body = document.getElementById('body');
+  const after = document.body;
+
+  // Determine target background image
+  const newBg = role === 'organizer' ? '{% static 'purp.png' %}' : '{% static 'gold.png' %}';
+
+  // Crossfade using ::after
+  body.style.setProperty('--next-bg', `url(${newBg})`);
+  const afterEl = document.createElement('div');
+  afterEl.style.position = 'fixed';
+  afterEl.style.top = '0';
+  afterEl.style.left = '0';
+  afterEl.style.width = '100%';
+  afterEl.style.height = '100%';
+  afterEl.style.backgroundImage = `url(${newBg})`;
+  afterEl.style.backgroundSize = 'cover';
+  afterEl.style.backgroundPosition = 'center';
+  afterEl.style.opacity = '0';
+  afterEl.style.transition = 'opacity 0.8s ease-in-out';
+  afterEl.style.zIndex = '-2';
+
+  document.body.appendChild(afterEl);
+  setTimeout(() => {
+    afterEl.style.opacity = '1';
+    body.style.backgroundImage = `url(${newBg})`;
+  }, 10);
+
+  setTimeout(() => {
+    document.body.removeChild(afterEl);
+  }, 900);
+
+  // Save to localStorage
+  localStorage.setItem('selectedRole', role);
+}
+
+
+    // On toggle click
+    organizerOption.addEventListener('click', () => switchRole('organizer'));
+    judgeOption.addEventListener('click', () => switchRole('judge'));
+
+    // On form submit
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const role = roleInput.value;
+      const username = document.getElementById('username').value.trim();
+      if (!username) {
+        alert("Please enter a username.");
+        return;
+      }
+
+      if (role === 'organizer') {
+        window.location.href = "{% url 'organizer-dashboard' %}";
+      } else {
+        window.location.href = "{% url 'judge-dashboard' %}";
+      }
+    });
+
+    // Load saved role
+    const savedRole = localStorage.getItem('selectedRole');
+    if (savedRole) {
+      switchRole(savedRole);
+    }
+  </script>
+</body>
+</html>

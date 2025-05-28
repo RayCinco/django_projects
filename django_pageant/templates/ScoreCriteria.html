@@ -1,0 +1,71 @@
+{% load static %}
+
+<!-- Score_Criteria.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Criteria Scores</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <style>
+    .card {
+      background: linear-gradient(to right, #2c003e, #4b0082);
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      color: white;
+    }
+    .container { padding: 2rem; }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <h1>📋 Criteria Breakdown 📋</h1>
+  </header>
+  <div class="container">
+    <main class="content" id="criteriaContainer"></main>
+    <div class="back-link">
+      <a id="backLink" href="{% url 'organizer-score-segment' %}">← Back to Segment Scores</a>
+    </div>
+  </div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const eventIndex = params.get('event');
+const participant = params.get('participant');
+const segment = params.get('segment');
+
+const events = JSON.parse(sessionStorage.getItem('pageantEvents')) || [];
+const scores = JSON.parse(sessionStorage.getItem('pageantScores')) || {};
+
+const data = events[eventIndex];
+const selectedSegment = data?.segments?.find(s => s.name === segment);
+const saved = scores?.[eventIndex]?.[participant]?.[segment] || {};
+
+const container = document.getElementById('criteriaContainer');
+document.getElementById('backLink').href = `{% url 'organizer-score-segment' %}?event=${eventIndex}&participant=${encodeURIComponent(participant)}`;
+
+if (selectedSegment && selectedSegment.criteria && selectedSegment.criteria.length > 0) {
+  selectedSegment.criteria.forEach(c => {
+    const score = saved.criteria?.[c.name] ?? 'N/A';
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <h3>${c.name} (${c.weight}%)</h3>
+      <p><strong>Score:</strong> ${score} / 10</p>
+    `;
+    container.appendChild(div);
+  });
+
+  const finalDiv = document.createElement('div');
+  finalDiv.className = 'card';
+  finalDiv.innerHTML = `<h3>Total Weighted Segment Score: ${saved.weightedScore?.toFixed(2) || '0.00'} / 10</h3>`;
+  container.appendChild(finalDiv);
+
+} else {
+  container.innerHTML = '<p>No criteria found for this segment.</p>';
+}
+</script>
+</body>
+</html>

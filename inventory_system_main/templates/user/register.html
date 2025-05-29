@@ -1,0 +1,15 @@
+{% extends 'partials/base_login.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Register Page{% endblock %}
+{% block content %}
+<div class="container">
+        {% csrf_token %}
+        {{ form|crispy}}
+        <button type="submit">Register</button>  
+       <div class="container" style="background-color:#f1f1f1">
+        <p>Have an account?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'user-login' %}" ><button type="button" class="registerbtn">Login</button></a></p>
+        </div>
+
+</div> 
+
+{% endblock %}

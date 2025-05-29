@@ -1,0 +1,5 @@
+.env
+my-venv/
+Dockerfile
+command.txt
+sql_table.txt

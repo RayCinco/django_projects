@@ -1,0 +1,38 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static '/styles.css' %}"> <!-- This is the link to your CSS -->
+    <!-- Font Awesome -->  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+<!-- jQuery 3 -->
+<script src="http://localhost/InventorySystem/assets/bower_components/jquery/dist/jquery.min.js"></script>
+
+<!-- Bootstrap 3.3.7 -->
+<script src="http://localhost/InventorySystem/assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- AdminLTE App -->
+<script src="http://localhost/InventorySystem/assets/dist/js/adminlte.min.js"></script>
+</head>
+<body>
+    {% include 'partials/topnav.html' %}
+    {% include 'partials/nav.html' %}
+    {% block content%} {% endblock %}
+
+    <script>
+        function toggleDropdown(event) {
+            event.preventDefault();
+            const content = event.currentTarget.nextElementSibling;
+            const isVisible = content.style.display === 'block';
+            content.style.display = isVisible ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>

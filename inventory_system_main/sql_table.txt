@@ -1,0 +1,97 @@
+// PRODUCT TABLE
+
+CREATE TABLE `dashboard_product` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) DEFAULT NULL,
+    price DECIMAL(10, 2) DEFAULT NULL,
+    quantity INT UNSIGNED DEFAULT NULL,
+    product_image VARCHAR(255) NOT NULL DEFAULT 'product.jpg',
+    description TEXT DEFAULT NULL,
+    date_added DATETIME DEFAULT CURRENT_TIMESTAMP,
+    date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+// CHange product_image to default null
+
+// ORDER TABLE
+CREATE TABLE `dashboard_order` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_name VARCHAR(100) NOT NULL,
+    user INT UNSIGNED DEFAULT NULL,
+    product INT DEFAULT NULL,  -- ✅ match dashboard_product.id
+    quantity INT UNSIGNED NOT NULL,
+    order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    order_notes TEXT DEFAULT NULL,
+    FOREIGN KEY (user) REFERENCES auth_user(id) ON DELETE CASCADE,
+    FOREIGN KEY (product) REFERENCES dashboard_product(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+//USER TABLE
+CREATE TABLE `auth_user` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(150) NOT NULL UNIQUE,
+  `first_name` VARCHAR(150),
+  `last_name` VARCHAR(150),
+  `email` VARCHAR(254),
+  `password` VARCHAR(128) NOT NULL,
+  `is_staff` BOOLEAN NOT NULL DEFAULT FALSE,
+  `is_active` BOOLEAN NOT NULL DEFAULT TRUE,
+  `is_superuser` BOOLEAN NOT NULL DEFAULT FALSE,
+  `last_login` DATETIME DEFAULT NULL,
+  `date_joined` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+// CHANGE PRODUCT TABLE
+CREATE TABLE `dashboard_product` (
+    id INT PRIMARY KEY,
+    name VARCHAR(100) DEFAULT NULL,
+    price DECIMAL(10, 2) DEFAULT NULL,
+    quantity INT UNSIGNED DEFAULT NULL,
+    product_image VARCHAR(255) NOT NULL DEFAULT 'product.jpg',
+    description TEXT DEFAULT NULL,
+    date_added DATETIME DEFAULT CURRENT_TIMESTAMP,
+    date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+//CHANGE ORDER TABLE
+
+CREATE TABLE `dashboard_order` (
+    id INT PRIMARY KEY,
+    customer_name VARCHAR(100) NOT NULL,
+    user INT UNSIGNED DEFAULT NULL,
+    product INT DEFAULT NULL,  -- ✅ match dashboard_product.id
+    quantity INT UNSIGNED NOT NULL,
+    order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    order_notes TEXT DEFAULT NULL,
+    FOREIGN KEY (user) REFERENCES auth_user(id) ON DELETE CASCADE,
+    FOREIGN KEY (product) REFERENCES dashboard_product(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+//ORDER HISTORY TABLE
+CREATE TABLE `order_history` (
+    id INT PRIMARY KEY,
+    user VARCHAR(100) NOT NULL DEFAULT 'user',
+    customer_name VARCHAR(100) NOT NULL,
+    product_name VARCHAR(100) NOT NULL,
+    quantity INT UNSIGNED NOT NULL,
+    price_per_item DECIMAL(10, 2) NOT NULL,
+    total_price DECIMAL(10, 2) NOT NULL,
+    order_notes TEXT DEFAULT NULL,
+    timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    movement_type VARCHAR(50) NOT NULL DEFAULT 'added'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+//PRODUCT HISTORY TABLE
+CREATE TABLE `product_history` (
+    id INT PRIMARY KEY,
+    name VARCHAR(100) DEFAULT NULL,
+    price DECIMAL(10, 2) DEFAULT NULL,
+    quantity INT UNSIGNED DEFAULT NULL,
+    date_added DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    movement_type VARCHAR(50) NOT NULL DEFAULT 'added'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -1,0 +1,157 @@
+{% extends 'partials/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}History Page{% endblock %}
+
+{% block content %} 
+
+<div class="main">
+                    {% for message in messages%}
+            <div class ="alert alert-{{message.tags}}">
+                {{message}}
+            </div>
+            {% endfor %}
+    <h2>Order History</h2>
+    <table class="product-table">
+<thead>
+    <tr>
+        <th>Bill No.</th>
+        
+        <th>
+          Customer Name
+          {% if current_sort == 'customer_name' %}
+            <a href="?sort=customer_name&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+              <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+            </a>
+          {% else %}
+            <a href="?sort=customer_name&order=asc">
+              <i class="fas fa-sort"></i>
+            </a>
+          {% endif %}
+        </th>
+        
+        <th>
+          Product
+          {% if current_sort == 'product_name' %}
+            <a href="?sort=product_name&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+              <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+            </a>
+          {% else %}
+            <a href="?sort=product_name&order=asc">
+              <i class="fas fa-sort"></i>
+            </a>
+          {% endif %}
+        </th>
+        
+        <th>
+          Quantity
+          {% if current_sort == 'quantity' %}
+            <a href="?sort=quantity&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+              <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+            </a>
+          {% else %}
+            <a href="?sort=quantity&order=asc">
+              <i class="fas fa-sort"></i>
+            </a>
+          {% endif %}
+        </th>
+        
+        <th>
+          Price
+          {% if current_sort == 'price_per_item' %}
+            <a href="?sort=price_per_item&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+              <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+            </a>
+          {% else %}
+            <a href="?sort=price_per_item&order=asc">
+              <i class="fas fa-sort"></i>
+            </a>
+          {% endif %}
+        </th>
+        
+        <th>
+          Total Price
+          {% if current_sort == 'total_price' %}
+            <a href="?sort=total_price&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+              <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+            </a>
+          {% else %}
+            <a href="?sort=total_price&order=asc">
+              <i class="fas fa-sort"></i>
+            </a>
+          {% endif %}
+        </th>
+        
+        <th>
+          Ordered By
+          {% if current_sort == 'user__username' %}
+            <a href="?sort=user__username&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+              <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+            </a>
+          {% else %}
+            <a href="?sort=user__username&order=asc">
+              <i class="fas fa-sort"></i>
+            </a>
+          {% endif %}
+        </th>
+        
+        <th>
+          Date Deleted
+          {% if current_sort == 'timestamp' %}
+            <a href="?sort=timestamp&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+              <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+            </a>
+          {% else %}
+            <a href="?sort=timestamp&order=asc">
+              <i class="fas fa-sort"></i>
+            </a>
+          {% endif %}
+        </th>
+        
+        <th>
+  Movement Type
+  {% if current_sort == 'movement_type' %}
+    <a href="?sort=movement_type&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+      <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+    </a>
+  {% else %}
+    <a href="?sort=movement_type&order=asc">
+      <i class="fas fa-sort"></i>
+    </a>
+  {% endif %}
+</th>
+    </tr>
+</thead>
+
+        <tbody>
+            {% for history in history_entries %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ history.customer_name }}</td>
+                <td>{{ history.product_name }}</td>
+                <td>{{ history.quantity }}</td>
+                <td>{{ history.price_per_item }}</td>
+                <td>{{ history.total_price }}</td>
+                <td>{{ history.user }}</td>
+                <td>{{ history.formatted_date }}</td>
+
+                <td>
+<span class="movement-type orderhistory-movement-{{ history.movement_type }}">
+    {{ history.movement_type|capfirst }}
+</span>
+                </td>
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" style="text-align: center;">No history records found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        <div class="button-container">
+        <a href="{% url 'export-order-history' %}" class="btn btn-primary">Export</a>
+    </div>
+
+</div>
+
+{% endblock %}

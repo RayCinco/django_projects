@@ -1,0 +1,19 @@
+
+<div class="navbar">
+    <div class="nav-left">
+        {% if user.is_superuser %}
+            <span class="panel-label">Admin Panel</span>
+        {% elif user.is_staff %}
+            <span class="panel-label">Staff Panel</span>
+        {% else %}
+            <span class="panel-label">User Panel</span>
+        {% endif %}
+    </div>
+    <div class="nav-right">
+        <div class="logo">Logilist</div>
+        <div class="welcome-message">
+            Welcome{% if user.is_authenticated %}, {{ user.username }}{% endif %}
+        </div>
+        <div class="welcome-message">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    </div>
+</div>

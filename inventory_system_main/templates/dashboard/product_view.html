@@ -1,0 +1,45 @@
+{% extends 'partials/base.html' %}
+
+{% block title %} Product Page {% endblock %}
+
+{% block content %}
+<div class="product-container">
+    
+    <!-- Remove edit if not staff or superuser -->
+    <div class="product-header">
+        <h2>Product Information</h2>
+        {% if user.is_staff or user.is_superuser %}
+        <a class="edit-btn" href="{% url 'dashboard-product-update' product.id %}">Edit</a>
+        {% else %}
+        <a class="back-btn" href="{% url 'dashboard-product-manage' %}">Back</a>
+        {% endif %}
+    </div>
+    
+    <div class="product-body">
+        <div class="product-info">
+            <div class="info-item">
+                <p><strong>Name:</strong> {{ product.name }}</p>
+            </div>
+            <div class="info-item">
+                <p><strong>Price:</strong> {{ product.price}}</p>
+            </div>
+            <div class="info-item">
+                <p><strong>Quantity:</strong> {{ product.quantity }}</p>
+            </div>
+            <div class="info-item">
+                <p><strong>Date Added:</strong>{{ product.date_added}}</p>
+            </div>
+            <div class="info-item">
+                <p><strong>Last Modified:</strong> {{ product.date_updated }}</p>
+            </div>
+            <div class="info-item">
+                <p><strong>Description:</strong> {{ product.description }}</p>
+            </div>
+        </div>
+
+        <div class="product-image">
+            <img class="img-thumbnail" src="{{ product.product_image.url }}" alt="Product Image">
+        </div>
+    </div>
+</div>
+{% endblock %}

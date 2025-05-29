@@ -1,0 +1,62 @@
+{% extends 'partials/base.html' %}
+
+{% load crispy_forms_tags %}
+{% block title %}Manage User Page{% endblock %}
+
+{% block content %} 
+
+<div class="main">
+                      {% for message in messages%}
+            <div class ="alert alert-{{message.tags}}">
+                {{message}}
+            </div>
+            {% endfor %}
+    <h2>Manage Users</h2>
+    <table class="product-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Full Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example static rows -->
+             {% for user in users%}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{user.first_name }} {{ user.last_name }}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.email}}</td>
+                <td>
+                    <a href="{% url 'dashboard-user-view' user.id %}" class="view-btn">
+                        <i class="fa fa-eye"></i>
+                    </a>
+
+                    <a href="{% url 'dashboard-delete' model_name='user' pk=user.id %}" class="delete-btn">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+
+            {% empty %}
+            <tr>
+                <td colspan="8" style="text-align: center;">No user found.</td>
+            </tr>
+
+            {% endfor %}
+            <!-- You can add more static rows or populate with JavaScript -->
+        </tbody>
+    </table>
+
+    <div class="button-container">
+        <a href="{% url 'dashboard-user' %}" class="add-products-btn"> Add User</a>
+    </div>
+    <div class="button-container">
+        <a href="{% url 'export-users' %}" class="btn btn-primary">Export</a>
+    </div>
+</div>
+
+{% endblock %}

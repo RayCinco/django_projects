@@ -1,0 +1,21 @@
+{% load static %}
+<html>
+<head>
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/login.css' %}">
+</head>
+<body>
+
+    <form method="POST" style="margin-top: 100px;">
+    <div class="imgcontainer">
+        <img src="{% static '/images/Logo.png' %}" alt="Avatar" class="avatar">
+    </div>
+
+    {% block content%} {% endblock %}
+
+    </form>
+
+
+
+</body>
+</html>

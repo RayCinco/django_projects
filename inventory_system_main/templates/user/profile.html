@@ -1,0 +1,35 @@
+{% extends 'partials/base.html' %}
+{% block title %} Profile Page {% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h2>Profile Information</h2>
+        <a class="edit-btn" href="{% url 'user-profile-update' %}">Edit</a>
+    </div>
+    
+    <div class="profile-body">
+        <div class="profile-info">
+            <div class="info-item">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+            </div>
+            <div class="info-item">
+                <p><strong>Full Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+            </div>
+            <div class="info-item">
+                <p><strong>Email:</strong> {{ user.email }}</p>
+            </div>
+            <div class="info-item">
+                <p><strong>Phone:</strong> {{ user.profile.phone }}</p>
+            </div>
+            <div class="info-item">
+                <p><strong>Address:</strong> {{ user.profile.address }}</p>
+            </div>
+        </div>
+
+        <div class="profile-image">
+            <img class="img-thumbnail" src="{{ user.profile.profile_image.url }}" alt="Profile Image">
+        </div>
+    </div>
+</div>
+{% endblock %}

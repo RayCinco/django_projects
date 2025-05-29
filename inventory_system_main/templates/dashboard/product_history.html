@@ -1,0 +1,118 @@
+{% extends 'partials/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Product History Page{% endblock %}
+
+{% block content %} 
+
+<div class="main">
+                    {% for message in messages%}
+            <div class ="alert alert-{{message.tags}}">
+                {{message}}
+            </div>
+            {% endfor %}
+    <h2>Product History</h2>
+    <table class="product-table">
+      <thead>
+  <tr>
+    <th>#</th>
+
+    <!-- Product Name -->
+    <th>
+      Product Name
+      {% if current_sort == 'name' %}
+        <a href="?sort=name&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+          <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+        </a>
+      {% else %}
+        <a href="?sort=name&order=asc">
+          <i class="fas fa-sort"></i>
+        </a>
+      {% endif %}
+    </th>
+
+    <!-- Price -->
+    <th>
+      Price
+      {% if current_sort == 'price' %}
+        <a href="?sort=price&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+          <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+        </a>
+      {% else %}
+        <a href="?sort=price&order=asc">
+          <i class="fas fa-sort"></i>
+        </a>
+      {% endif %}
+    </th>
+
+    <!-- Quantity -->
+    <th>
+      Quantity
+      {% if current_sort == 'quantity' %}
+        <a href="?sort=quantity&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+          <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+        </a>
+      {% else %}
+        <a href="?sort=quantity&order=asc">
+          <i class="fas fa-sort"></i>
+        </a>
+      {% endif %}
+    </th>
+
+    <!-- Date Added -->
+    <th>
+      Date Added
+      {% if current_sort == 'timestamp' %}
+        <a href="?sort=timestamp&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+          <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+        </a>
+      {% else %}
+        <a href="?sort=timestamp&order=asc">
+          <i class="fas fa-sort"></i>
+        </a>
+      {% endif %}
+    </th>
+
+    <!-- Movement Type -->
+    <th>
+      Movement Type
+      {% if current_sort == 'movement_type' %}
+        <a href="?sort=movement_type&order={% if current_order == 'asc' %}desc{% else %}asc{% endif %}">
+          <i class="fas fa-sort-{% if current_order == 'asc' %}up{% else %}down{% endif %}"></i>
+        </a>
+      {% else %}
+        <a href="?sort=movement_type&order=asc">
+          <i class="fas fa-sort"></i>
+        </a>
+      {% endif %}
+    </th>
+  </tr>
+</thead>
+
+
+        <tbody>
+            {% for history in history_entries %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ history.name }}</td>
+                <td>{{ history.price }}</td>
+                <td>{{ history.quantity }}</td>
+                <td>{{ history.formatted_date }}</td>
+                <td>
+<span class="movement-type orderhistory-movement-{{history.movement_type}}">
+    {{ history.movement_type|capfirst }}
+</span>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align: center;">No product history records found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+            <div class="button-container">
+        <a href="{% url 'export-product-history' %}" class="btn btn-primary">Export</a>
+    </div>
+</div>
+
+{% endblock %}

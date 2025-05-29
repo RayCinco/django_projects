@@ -1,0 +1,70 @@
+{% extends 'partials/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add Product Page{% endblock %}
+
+{% block content %}
+<div class="main">
+                          {% for message in messages%}
+            <div class ="alert alert-{{message.tags}}">
+                {{message}}
+            </div>
+            {% endfor %}
+    <h2>Manage Products</h2>
+    <table class="product-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Availability</th>
+                <th>Date Added</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>True</td>
+                        <td>{{ product.date_added }}</td>
+                        <td>
+                            <a href="{% url 'dashboard-product-view' product.id %}" class="view-btn">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <!-- Remove add product If not admin or staff-->
+                            {% if user.is_staff or user.is_superuser %}
+                            <a href="{% url 'dashboard-delete' model_name='product' pk=product.id %}" class="delete-btn">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center;">No products found.</td>
+                </tr>
+            
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <!-- Remove add product If not admin or staff-->
+
+    {% if user.is_staff or user.is_superuser %}
+    <div class="button-container">
+        <a href="{% url 'dashboard-product' %}" class="add-products-btn">Add Products</a>
+    </div>
+    <div class="button-container">
+        <a href="{% url 'export-products' %}" class="btn btn-primary">Export</a>
+    </div>
+    {% endif %}
+
+    
+    
+</div>
+{% endblock %}

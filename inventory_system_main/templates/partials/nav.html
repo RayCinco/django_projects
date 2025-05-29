@@ -1,0 +1,104 @@
+<!-- SIDEBAR-->
+
+{% if user.is_staff or user.is_superuser%}
+<div class="sidebar">
+    <a href="{% url 'dashboard-index' %}"><i class="fa fa-dashboard"></i> Dashboard</a>
+
+    <div class="dropdown-menu">
+        <a href="#" class="dropdown-toggle" onclick="toggleDropdown(event)">
+            <i class="fa fa-users"></i> Users
+            <i class="fa fa-caret-down" style="float:right;"></i>
+        </a>
+        <div class="dropdown-content" style="display: none;">
+            <a href="{% url 'dashboard-user'%}">Add Users</a>
+            <a href="{% url 'dashboard-user-manage'%}">Manage Users</a>
+        </div>
+    </div>
+
+    <div class="dropdown-menu">
+        <a href="#" class="dropdown-toggle" onclick="toggleDropdown(event)">
+            <i class="fa fa-box"></i> Products 
+            <i class="fa fa-caret-down" style="float:right;"></i>
+        </a>
+        <div class="dropdown-content" style="display: none;">
+            <a href="{% url 'dashboard-product' %}">Add Products</a>
+            <a href="{% url 'dashboard-product-manage' %}">Manage Products</a>
+        </div>
+    </div>
+
+    <div class="dropdown-menu">
+        <a href="#" class="dropdown-toggle" onclick="toggleDropdown(event)">
+            <i class="fa fa-shopping-cart"></i> Orders 
+            <i class="fa fa-caret-down" style="float:right;"></i>
+        </a>
+        <div class="dropdown-content" style="display: none;">
+            <a href="{% url 'dashboard-order' %}">Add Orders</a>
+            <a href="{% url 'dashboard-order-manage' %}">Manage Orders</a>
+        </div>
+    </div>
+
+    <a href="{% url 'user-profile' %}"><i class="fa fa-user"></i> Profile</a>
+    <div class="dropdown-menu">
+        <a href="#" class="dropdown-toggle" onclick="toggleDropdown(event)">
+            <i class="fa fa-history"></i> History
+            <i class="fa fa-caret-down" style="float:right;"></i>
+        </a>
+        <div class="dropdown-content" style="display: none;">
+            <a href="{% url 'dashboard-order-history' %}">Order History</a>
+            <a href="{% url 'dashboard-product-history' %}">Product History</a>
+        </div>
+    </div>
+    
+
+    <div class="logout-container" style="position: absolute; bottom: 20px; width: 100%; padding-left: 10px;">
+        <form method="POST" action="{% url 'user-logout' %}" class="logout-form" style = "margin-left: 10px;">
+            {% csrf_token %}
+            <input class="btn btn-danger" type="submit" value="Logout">
+        </form>
+    </div>
+</div>
+
+<!-- User Nav -->
+{% else %}
+
+<div class="sidebar">
+    <a href="{% url 'dashboard-index' %}"><i class="fa fa-dashboard"></i> Dashboard</a>
+
+
+    <div class="dropdown-menu">
+        <a href="#" class="dropdown-toggle" onclick="toggleDropdown(event)">
+            <i class="fa fa-box"></i> Products 
+            <i class="fa fa-caret-down" style="float:right;"></i>
+        </a>
+        <div class="dropdown-content" style="display: none;">
+            <a href="{% url 'dashboard-product-manage' %}">View Products</a>
+        </div>
+    </div>
+
+    <div class="dropdown-menu">
+        <a href="#" class="dropdown-toggle" onclick="toggleDropdown(event)">
+            <i class="fa fa-shopping-cart"></i> Orders 
+            <i class="fa fa-caret-down" style="float:right;"></i>
+        </a>
+        <div class="dropdown-content" style="display: none;">
+            <a href="{% url 'dashboard-order' %}">Make Order</a>
+            <a href="{% url 'dashboard-order-manage' %}">Your Orders</a>
+        </div>
+    </div>
+
+    <a href="{% url 'user-profile' %}"><i class="fa fa-user"></i> Profile</a>
+
+    <!-- Place the logout form at the bottom -->
+    <div class="logout-container" style="position: absolute; bottom: 20px; width: 100%; padding-left: 10px;">
+        <form method="POST" action="{% url 'user-logout' %}" class="logout-form" style = "margin-left: 10px;">
+            {% csrf_token %}
+            <input class="btn btn-danger" type="submit" value="Logout">
+        </form>
+    </div>
+</div>
+
+
+{% endif %}
+
+    <!-- Logout -->
+

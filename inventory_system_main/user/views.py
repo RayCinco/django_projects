@@ -43,3 +43,4 @@ def profile_update(request):
         'profile_form':profile_form
     }
     return render(request, 'user/profile_update.html',context)
+

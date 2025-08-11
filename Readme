@@ -1,0 +1,39 @@
+Django Projects – Built by Raymond Cinco
+This repository contains multiple Django-based projects developed by Raymond Cinco. Each project demonstrates different aspects of web development using Django, including user management, inventory systems, and event management.
+
+📋 Projects Included
+django_inventory_system
+Inventory management application with user profiles, product tracking, and order history.
+
+pageant_system
+Event management system for pageants, including participant ranking, scoring, and judge dashboards.
+
+🧪 Technologies Used
+Django
+Python
+SQLite
+HTML, CSS, JavaScript
+Docker (for containerization)
+Virtual Environments (venv)
+
+⚙️ Setup Instructions
+Clone the repository: git clone https://github.com/RayCinco/django_projects.git
+
+Navigate to the project folder
+Create and activate the virtual environment
+Run the development server:
+python manage.py runserver
+
+🚀 Features
+User authentication and profile management
+Inventory and product management
+Order tracking and history (XML export) and imported to a Java Project
+Event and participant management (pageant system)
+Judge dashboards and scoring
+Static and media file handling
+
+📈 Status
+✅ Projects are actively maintained and completed.
+
+🙌 Credits
+All files and projects in this repository were created by Raymond Cinco.
